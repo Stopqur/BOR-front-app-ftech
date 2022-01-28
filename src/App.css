@@ -1,0 +1,13 @@
+p {
+  margin: 0;
+  padding: 0;
+}
+
+.profile__description {
+  color: orange; 
+}
+
+.input__check-empty::placeholder {
+  color: rgb(200, 45, 45);
+}
+
