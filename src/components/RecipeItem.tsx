@@ -30,9 +30,8 @@ const RecipeItem = ({ item, flagIcon, token }: RecipeProps) => {
 
   const handleAddRecipe = ({recipe_id, userId}: WishProps) => {
     try {
-      const request = authhost.post('/api/recipe/', {recipe_id, user_id: userId})
+      authhost.post('/api/recipe/', {recipe_id, user_id: userId})
       setHeartIcon(!heartIcon)
-      console.log(request)
     } catch(e) {
       console.log(e)
     }

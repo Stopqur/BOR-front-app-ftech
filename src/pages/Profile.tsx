@@ -18,14 +18,13 @@ const Profile:React.FC = () => {
   const saveEmail = async(email:string) => {
     try {
       const user = await authhost.put('api/auth/user/' + userId, {email: email})
-      console.log(user)
       setTypeField(false)
       return user
     } catch(e) {
       console.log('ERROR', e)
     }
   }
-  
+
   return (
     <Container className='d-flex flex-column align-items-center'>
       <h2>Profile</h2>
