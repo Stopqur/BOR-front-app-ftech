@@ -11,10 +11,10 @@ import { persistor } from './store/index'
 function App() {
   return ( 
     <BrowserRouter>
-    <PersistGate persistor={persistor}>
-      <NavBar />
-      <AppRouter />
-    </PersistGate>
+      <PersistGate persistor={persistor}>
+        <NavBar />
+        <AppRouter />
+      </PersistGate>
     </BrowserRouter>
   );
 }

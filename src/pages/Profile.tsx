@@ -1,19 +1,12 @@
-import axios from 'axios'
-import React, { useEffect, useState } from 'react'
-import { Button, Card, Container, Form, FormControl, ListGroup, Row } from 'react-bootstrap'
-import { useDispatch } from 'react-redux'
-import { check } from '../api/userApi'
-// import { store } from '../store'
-import { authCheckAction } from '../store/actions/auth'
-import { userDataAction } from '../store/actions/user'
-import { typeUseSelector } from '../store/hookUseSelector'
-import { $authhost } from '../api'
+import React, { useState } from 'react'
+import { Button, Card, Container, Form, FormControl } from 'react-bootstrap'
+
+import { UseSelectorType } from '../hooks/hookUseSelector'
+import { authhost } from '../api'
 
 const Profile:React.FC = () => {
-  // const dispatch = useDispatch()
-  const { authCheck } = typeUseSelector(store => store.authCheck)
-  const { userId } = typeUseSelector(store => store.authUserId)
-  const { userData } = typeUseSelector(store => store.dataUser)
+  const { userId } = UseSelectorType(store => store.authUserId)
+  const { userData } = UseSelectorType(store => store.dataUser)
 
   const [newEmail, setNewEmail] = useState<string>(userData.email)
   const [typeField, setTypeField] = useState<boolean>(false)
@@ -24,7 +17,7 @@ const Profile:React.FC = () => {
 
   const saveEmail = async(email:string) => {
     try {
-      const user = await $authhost.put('api/auth/user/' + userId, {email: email})
+      const user = await authhost.put('api/auth/user/' + userId, {email: email})
       console.log(user)
       setTypeField(false)
       return user
@@ -32,7 +25,7 @@ const Profile:React.FC = () => {
       console.log('ERROR', e)
     }
   }
-
+  
   return (
     <Container className='d-flex flex-column align-items-center'>
       <h2>Profile</h2>

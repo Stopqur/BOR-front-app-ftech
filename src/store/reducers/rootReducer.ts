@@ -3,23 +3,23 @@ import { persistReducer } from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
 
 import { recipeReducer } from './recipeReducer'
-import { authReducer } from './authCheckReducer'
 import { authUserReducer, userIdReducer } from './authUserReducer'
 import { userDataReducer } from './userDataReducer'
+import { wishListReducer } from './wishListReducer'
 
 const persistConfig = {
   key: 'root',
   storage,
-  whitelist: ['recipe', 'authCheck', 'authUser', 'authUserId', 'dataUser',]
+  whitelist: ['recipe', 'authCheck', 'authUser', 'authUserId', 'dataUser', 'colorIcon']
 }
 
-const mainReducer = combineReducers({
+const rootReducer = combineReducers({
   recipe: recipeReducer,
-  authCheck: authReducer,
   authUser: authUserReducer,
   authUserId: userIdReducer,
-  dataUser: userDataReducer
+  dataUser: userDataReducer,
+  wishRecipes: wishListReducer
 }) 
-export default persistReducer(persistConfig, mainReducer)
+export default persistReducer(persistConfig, rootReducer)
 
-export type mainState = ReturnType<typeof mainReducer>
+export type mainState = ReturnType<typeof rootReducer>

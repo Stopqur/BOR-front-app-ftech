@@ -3,11 +3,83 @@ p {
   padding: 0;
 }
 
+ul {
+  list-style-type: none;
+}
+
 .profile__description {
   color: orange; 
 }
 
 .input__check-empty::placeholder {
-  color: rgb(200, 45, 45);
+  color: rgb(206, 13, 45);
 }
 
+.complexity {
+  color: orange;
+  margin-left: 5px;
+  font-weight: 600;
+  padding: 5px 10px;
+  border: 2px solid #dc3545;
+  border-radius: 4px;
+}
+
+
+.btn-recipes + .btn-recipes {
+  margin-left: 20px;
+}
+
+.recipe {
+  border: 1px solid black;
+  position: relative;
+  padding: 30px;
+  border-radius: 4px;
+}
+
+.recipe + .recipe {
+  margin-top: 40px;
+}
+
+.list-group-item+.list-group-item {
+  border-top-width: 1px;
+}
+.recipe__icon-btn {
+  position: absolute;
+  content: '';
+  z-index: 1;
+  top: -25px;
+  right: -25px; 
+  
+}
+
+.recipe_icon {
+  width: 30px;
+  height: 30px;
+}
+
+.sorting {
+  padding: 10px;
+  padding-bottom: 25px;
+  border-bottom: 2px solid #dc3545;
+  border-radius: 2px;
+}
+
+.btn-nav-bar + .btn-nav-bar {
+  margin-left: 10px;
+}
+
+.sort-btn + .sort-btn {
+  margin-left: 10px;
+}
+
+.form-control-range {
+  margin-left: 20px;
+}
+
+.cooking-step__action {
+  margin-left: 50px;
+}
+
+.cooking-step__helping {
+  color:#dc3545
+}

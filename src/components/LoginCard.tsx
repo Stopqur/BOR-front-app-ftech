@@ -5,13 +5,9 @@ import { Card, Form, Button, Row } from 'react-bootstrap'
 import { useDispatch } from 'react-redux'
 
 import { getUserIdAction } from '../store/actions/auth'
-import { typeUseSelector } from '../store/hookUseSelector'
 import { login } from '../api/userApi'
-import { authCheckAction } from '../store/actions/auth'
 
 const LoginCard:React.FC = () => {
-  const { authCheck } = typeUseSelector(store => store.authCheck)
-  // const { userId } = typeUseSelector(store => store.authUserId)
   const dispatch = useDispatch()
   const [errorMessage, setErrorMessage] = useState<string>('')
   const [email, setEmail] = useState<string>('')
@@ -38,23 +34,20 @@ const LoginCard:React.FC = () => {
     }
     else {
         try {
-          const response:any = await login(email, password)
+          const response:any = await login({email, password})
           dispatch(getUserIdAction(response.id))
-          dispatch(authCheckAction(true))
-          navigate('/api/auth/recipe')   
+          navigate('/recipe')   
       } catch(e:any) {
-          dispatch(authCheckAction(false))
           setErrorMessage(e.response.data.message)
-          console.log(e.response.data.message)
       }
     }
   }
   return (
     <Card style={{width: '500px'}} className='border-0'>
       <h2 className='mb-4' style={{color: 'green'}}>Authorization</h2>
-      {authCheck === false && errorMessage !== ''
+      {errorMessage !== ''
       ? <div className='alert alert-danger'>{errorMessage}</div>
-      : console.log(authCheck)
+      : console.log(errorMessage)
       }
       <Form>
         {checkField === false && !email ?
@@ -77,13 +70,15 @@ const LoginCard:React.FC = () => {
             value={password}
             onChange={e => setPassword(e.target.value)} 
             placeholder={passwordPlaceHolder}
+            type='password'
           />
         :
         <Form.Control
           value={password}
           onChange={e => setPassword(e.target.value)} 
           className='mt-2'
-          placeholder={passwordPlaceHolder} 
+          placeholder={passwordPlaceHolder}
+          type='password' 
         />
       }
         <Row className='d-flex justify-content-between align-items-center pt-3'>

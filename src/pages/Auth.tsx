@@ -1,9 +1,9 @@
 import React from 'react'
 import { Container } from 'react-bootstrap'
-import {   useLocation } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
 
-import LoginCard from './LoginCard'
-import RegistrationCard from './RegistrationCard'
+import LoginCard from '../components/LoginCard'
+import RegistrationCard from '../components/RegistrationCard'
 
 const Auth: React.FC = () => {
   const location = useLocation()
