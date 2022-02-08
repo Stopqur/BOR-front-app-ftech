@@ -8,13 +8,30 @@ interface IRecipeProps {
   userId?: number;
   img?: any;
   complexity?: number;
+  cookingTime?: string;
   formData?: any;
 }
 
-const createRecipe = async({title, description, cookingSteps,userId, complexity, formData}: IRecipeProps) => {
+const createRecipe = async({
+  title, 
+  description, 
+  cookingSteps,
+  userId, 
+  complexity, 
+  cookingTime, 
+  formData
+}: IRecipeProps) => {
   try {
     const newRecipeImg = await authhost.post('api/recipe/new', formData)
-    const newRecipe = await authhost.post('api/recipe/new', {title, description, cookingSteps, user_id: userId, complexity, img: newRecipeImg.data.img})
+    const newRecipe = await authhost.post('api/recipe/new', {
+      title, 
+      description, 
+      cookingSteps, 
+      user_id: userId, 
+      complexity, 
+      cookingTime, 
+      img: newRecipeImg.data.img
+    })
     return newRecipe
   } catch(e) {
     console.log(e)

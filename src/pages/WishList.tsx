@@ -14,7 +14,7 @@ const WishList:React.FC = () => {
 
   useEffect(() => {
     dispatch(getWishList(userId))
-  }, [dispatch, userId])
+  }, [])
 
   return (
     <div className='px-5 py-5'>

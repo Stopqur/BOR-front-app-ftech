@@ -1,36 +1,31 @@
-import React, { useState } from 'react'
+import React, { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { Button, ListGroup } from 'react-bootstrap'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 
 import { UseSelectorType } from '../hooks/hookUseSelector'
-import { getRecipes, getSortFilterRecipes, getUserRecipes } from '../store/actions/recipe'
+import { getRecipes, getUserRecipes } from '../store/actions/recipe'
 import RecipeItem from './RecipeItem'
 import Sorting from './Sorting'
 
 
 const RecipesList: React.FC = () => {
+  const location = useLocation()
+  const path = location.pathname
   const token = localStorage.getItem('token')
-  const { recipes, error } = UseSelectorType((state) => state.recipe)
+  const { recipes } = UseSelectorType((state) => state.recipe)
   const { userId } = UseSelectorType(state => state.authUserId)
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
-  const url: any = window.location
-  const paramUrl: any = (new URL(url)).searchParams.get('complexity') || '0'
-  const [complexityValue, setComplexityValue] = useState<string>(paramUrl)
-  
-  const sortComplexity = (param: string, paramValue: string) => {
-    if(param === 'complexity' && paramValue !=='ASC' && paramValue!=='DESC') {
-      setComplexityValue(paramValue)
+  useEffect(() => {
+    if (path === '/recipe') {
+      dispatch(getRecipes())
     }
-    navigate(`/recipe/get/?${param}=${paramValue}`)  
-    dispatch(getSortFilterRecipes(param, paramValue))
-  }
-
-  if(error) {
-    return <h2>{error}</h2>
-  }
+    else if (path === '/recipe/user/' + userId) {
+      dispatch(getUserRecipes(userId))
+    }
+  }, [])
 
   const handleGetRecipes = () => {
     dispatch(getRecipes())
@@ -40,6 +35,7 @@ const RecipesList: React.FC = () => {
     dispatch(getUserRecipes(userId))
     navigate('/recipe/user/' + userId) 
   }
+  
   return (
     <div className='px-5 py-5'>
       {token ?
@@ -59,11 +55,18 @@ const RecipesList: React.FC = () => {
         </div>
       : null
       }
-      <Sorting sortComplexity={sortComplexity} complexityValue={complexityValue}/>
+      <Sorting/>
       <ListGroup>
         {recipes.length > 0 ?
           recipes.map(item => {
-            return <RecipeItem key={item.id} item={item} flagIcon={false} token={token}/>
+            return (
+            <RecipeItem 
+              key={item.id} 
+              item={item} 
+              flagIcon={false} 
+              token={token}
+            />
+            )
         })
         :
         <h2 className='text-center'>Recipe list is empty</h2>

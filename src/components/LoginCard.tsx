@@ -12,7 +12,7 @@ const LoginCard:React.FC = () => {
   const [errorMessage, setErrorMessage] = useState<string>('')
   const [email, setEmail] = useState<string>('')
   const [password, setPassword] = useState<string>('')
-  const [emailPlaceholder, setEmailPlaceHolder] = useState<string>('Username@mail.ru')
+  const [emailPlaceholder, setEmailPlaceHolder] = useState<string>('Email')
   const [passwordPlaceHolder, setPasswordPlaceHolder] = useState<string>('Password')
   const [checkField, setCheckField] = useState<boolean>(true)
 

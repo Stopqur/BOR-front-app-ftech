@@ -12,7 +12,7 @@ export const getRecipes = () => {
       const recipes = await axios.get(URL + '/api/recipe')
       dispatch({ type: RecipeActionTypes.GET_RECIPES, payload: recipes.data})
     } catch(e) {
-      dispatch({ type: RecipeActionTypes.GET_RECIPES_ERROR, payload: `error!!! ${e}`})
+      dispatch({ type: RecipeActionTypes.GET_RECIPES_ERROR, payload: `err!!! ${e}`})
     }
   }
 }
@@ -24,6 +24,18 @@ export const getUserRecipes = (id: number | undefined) => {
       dispatch({ type: RecipeActionTypes.GET_USER_RECIPES, payload: recipes.data})
     } catch(e) {
       dispatch({ type: RecipeActionTypes.GET_RECIPES_ERROR, payload: `error!!! ${e}`})
+    }
+  }
+}
+
+export const deleteUserRecipe = (paramName: string, paramValue: string) => {
+  return async (dispatch: Dispatch<RecipeAction>) => {
+    try {
+      const params = new URLSearchParams([[paramName, paramValue]]);
+      const recipes = await axios.delete(URL + '/api/recipe/user/:id', { params })
+      dispatch({type: RecipeActionTypes.GET_USER_RECIPES, payload: recipes.data})
+    } catch(e) {
+      console.log(e)
     }
   }
 }
@@ -40,17 +52,25 @@ export const getWishList = (id: number | undefined) => {
   }
 }
 
-export const getSortFilterRecipes = (paramName: string, paramValue: string) => {
+export const getSortFilterRecipes = (params: any) => {
   return async (dispatch: Dispatch<RecipeAction>) => {
     try {
-      const params = new URLSearchParams([[paramName, paramValue]]);
-      const sortFilterRecipes = await axios.get('http://localhost:5000/api/recipe/get', { params })
-      // const sortFilterRecipes = await axios.get('http://localhost:5000/api/recipe/get/?complexity=5')
+      let obj = {}
+      let updateParams: any = params.map((item: any) => {
+        let newItem = {
+          [item.param]: item.value
+        }
+        obj = {...obj, [item.param]: item.value}
+        return obj
+      })
       
-      console.log(sortFilterRecipes)
+      console.log(obj)
+      const sortFilterRecipes = await axios.get('http://localhost:5000/api/recipe/by', 
+        { params: obj })  
+      console.log(sortFilterRecipes)      
       dispatch({type: RecipeActionTypes.GET_SORT_FILTER_RECIPES, payload: sortFilterRecipes.data})
     } catch(e) {
-      console.log('ERRROR')
+      console.log('ERRROR', e)
     }
   }
 }

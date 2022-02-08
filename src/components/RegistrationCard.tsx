@@ -15,7 +15,7 @@ const RegistrationCard:React.FC = () => {
   const [password, setPassword] = useState<string>('')
   const [dob, setDob] = useState<string>('')
   const [errorMessage, setErrorMessage] = useState<string>('')
-  
+
   const createUser = async() => {
     try {
       if(username && email && password && dob) {
@@ -28,11 +28,19 @@ const RegistrationCard:React.FC = () => {
         setErrorMessage('Fill the form!')
       }
     } catch(e: any) {
-        const validationError = e.response.data['validation error'].errors[0]
-        setErrorMessage(validationError)    
+        if(typeof e.response.data['validation error'] === 'undefined') {
+          const validationError = e.response.data.message
+          setErrorMessage(validationError)    
+        } else {
+          const validationError = e.response.data['validation error'].errors[0]
+          setErrorMessage(validationError)    
+        }
     }
   }
 
+  const checkDate = (e: any) => {
+    setDob(e.target.value)
+  }
   return (
     <Card style={{width: '500px'}} className='border-0'>
       <h2 className='mb-4' style={{color: 'green'}}>Registration</h2>
@@ -44,26 +52,30 @@ const RegistrationCard:React.FC = () => {
         <Form.Control
           value={username}
           onChange={e => setUsername(e.target.value)} 
-          placeholder='username' 
+          placeholder='Username' 
         />
         <Form.Control
           value={email}
           onChange={e => setEmail(e.target.value)} 
           className='mt-2'
-          placeholder='email' 
+          placeholder='Email' 
         />
         <Form.Control
           value={password}
           onChange={e => setPassword(e.target.value)} 
           className='mt-2'
-          placeholder='password' 
+          placeholder='Password' 
           type='password'
         />
         <Form.Control
           value={dob}
-          onChange={e => setDob(e.target.value)} 
+          onChange={e => checkDate(e)} 
           className='mt-2'
-          placeholder='dob' 
+          placeholder='Dob' 
+          type='date'
+          min='1900-01-01'
+          max='2022-01-01'
+          required
         />
       </Form>
       <Row className='d-flex justify-content-between align-items-center pt-3'>
