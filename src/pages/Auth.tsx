@@ -7,14 +7,14 @@ import RegistrationCard from '../components/RegistrationCard'
 
 const Auth: React.FC = () => {
   const location = useLocation()
-  const pathAuth = location.pathname === '/api/auth/sign-in'
+  const isAuthPath = location.pathname === '/api/auth/sign-in'
   return (
     <Container className='d-flex justify-content-center mt-5'>
-      {pathAuth 
-      ?
-      <LoginCard />
-      :
-      <RegistrationCard />
+      {isAuthPath ? (
+        <LoginCard />
+      ) : (
+        <RegistrationCard />
+      )
       }
     </Container>
   ) 

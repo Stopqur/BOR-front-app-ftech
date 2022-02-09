@@ -6,6 +6,8 @@ import jwtDecode from 'jwt-decode'
 
 import { host } from '../api'
 import { getUserIdAction } from '../store/actions/auth'
+import { registration } from '../api/userApi'
+import { addToken } from '../api/userApi'
 
 const RegistrationCard:React.FC = () => {
   const navigate = useNavigate()
@@ -19,11 +21,10 @@ const RegistrationCard:React.FC = () => {
   const createUser = async() => {
     try {
       if(username && email && password && dob) {
-        const {data} = await host.post('api/auth/sign-up', { username, email, password, dob })
-        localStorage.setItem('token', data.accessToken)
+        const data = await registration({ username, email, password, dob })
         dispatch(getUserIdAction(data.id))
         navigate('/recipe')
-        return jwtDecode(data.accessToken)
+        addToken(data)
       } else {
         setErrorMessage('Fill the form!')
       }
@@ -44,9 +45,9 @@ const RegistrationCard:React.FC = () => {
   return (
     <Card style={{width: '500px'}} className='border-0'>
       <h2 className='mb-4' style={{color: 'green'}}>Registration</h2>
-      {errorMessage !== '' ?
-      <div className='alert alert-danger'>{errorMessage}</div>
-      : null
+      {errorMessage !== '' ? (
+        <div className='alert alert-danger'>{errorMessage}</div>
+        ) : null
       }
       <Form>
         <Form.Control
@@ -80,7 +81,7 @@ const RegistrationCard:React.FC = () => {
       </Form>
       <Row className='d-flex justify-content-between align-items-center pt-3'>
         <NavLink to='/api/auth/sign-in'> Sign in!</NavLink>
-        <Button className='mt-3' onClick={() => createUser()}>Register</Button>
+        <Button className='mt-3' onClick={createUser}>Register</Button>
       </Row>
     </Card>
   )

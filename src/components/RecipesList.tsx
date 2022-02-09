@@ -4,7 +4,7 @@ import { Button, ListGroup } from 'react-bootstrap'
 import { useNavigate, useLocation } from 'react-router-dom'
 
 import { UseSelectorType } from '../hooks/hookUseSelector'
-import { getRecipes, getUserRecipes } from '../store/actions/recipe'
+import { getRecipes, getSortFilterRecipes, getUserRecipes } from '../store/actions/recipe'
 import RecipeItem from './RecipeItem'
 import Sorting from './Sorting'
 
@@ -17,15 +17,23 @@ const RecipesList: React.FC = () => {
   const { userId } = UseSelectorType(state => state.authUserId)
   const dispatch = useDispatch()
   const navigate = useNavigate()
+  const { params } = UseSelectorType(store => store.params)
 
   useEffect(() => {
-    if (path === '/recipe') {
+    if(params) {
+      dispatch(getSortFilterRecipes(params))
+    }
+    else if (path === '/recipe') {
       dispatch(getRecipes())
     }
     else if (path === '/recipe/user/' + userId) {
       dispatch(getUserRecipes(userId))
     }
   }, [])
+  
+  useEffect(() => {
+    dispatch(getSortFilterRecipes(params))
+  }, [params])
 
   const handleGetRecipes = () => {
     dispatch(getRecipes())
@@ -38,22 +46,22 @@ const RecipesList: React.FC = () => {
   
   return (
     <div className='px-5 py-5'>
-      {token ?
+      {token ? (
         <div className='d-flex justify-content-center mb-3'>
           <Button 
             variant='outline-success'
             className='btn-recipes'
-            onClick={() => handleGetRecipes()}
+            onClick={handleGetRecipes}
           >All recipes
           </Button>
           <Button 
             variant='outline-success'
             className='btn-recipes'
-            onClick={() => handleGetUserRecipes()}
+            onClick={handleGetUserRecipes}
           >Your recipes
           </Button>
         </div>
-      : null
+        ) : null
       }
       <Sorting/>
       <ListGroup>

@@ -6,11 +6,12 @@ import { recipeReducer } from './recipeReducer'
 import { authUserReducer, userIdReducer } from './authUserReducer'
 import { userDataReducer } from './userDataReducer'
 import { wishListReducer } from './wishListReducer'
+import { paramsReducer } from './paramsReducer'
 
 const persistConfig = {
   key: 'root',
   storage,
-  whitelist: ['recipe', 'authCheck', 'authUser', 'authUserId', 'dataUser', 'colorIcon']
+  whitelist: ['recipe', 'authUser', 'authUserId', 'dataUser', 'colorIcon', 'params', 'wishRecipes']
 }
 
 const rootReducer = combineReducers({
@@ -18,8 +19,9 @@ const rootReducer = combineReducers({
   authUser: authUserReducer,
   authUserId: userIdReducer,
   dataUser: userDataReducer,
-  wishRecipes: wishListReducer
+  wishRecipes: wishListReducer,
+  params: paramsReducer
 }) 
 export default persistReducer(persistConfig, rootReducer)
 
-export type mainState = ReturnType<typeof rootReducer>
+export type MainState = ReturnType<typeof rootReducer>

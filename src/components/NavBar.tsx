@@ -6,9 +6,9 @@ import { useDispatch } from 'react-redux'
 
 import { userDataAction } from '../store/actions/user'
 import { getWishList } from '../store/actions/recipe'
-import { authhost } from '../api'
 import { UseSelectorType } from '../hooks/hookUseSelector'
 import NewRecipe from './NewRecipe'
+import { userProfile } from '../api/userApi'
 
 const NavBar:React.FC = () => {
   const location = useLocation()
@@ -31,12 +31,12 @@ const NavBar:React.FC = () => {
 
   const getProfile = async() => {
     try {
-      const { data } = await authhost.get('api/auth/user/' + userId)
-      dispatch(userDataAction(data))
+      const user_id = await userProfile(userId)
+      dispatch(userDataAction(user_id))
       const str = '/api/auth/user/' + userId
       navigate(str)  
     } catch(e) {
-      console.log('error', e)
+      console.log('error', {e})
     }
   }
 
@@ -72,49 +72,48 @@ const NavBar:React.FC = () => {
     <Navbar className='px-5 py-3 mb-3 justify-content-between' bg="dark" variant="dark">
       {!token && (path === '/api/auth/sign-in' || path === '/api/auth/sign-up') ?
       <Nav>
-        <Button onClick={() => openRecipes()}>All Recipes</Button>
+        <Button onClick={openRecipes}>All Recipes</Button>
       </Nav>
       : (!token && path === '/recipe') || !token ?
       <Nav>
-        <Button onClick={() => openRegister()}>Register</Button>
+        <Button onClick={openRegister}>Register</Button>
       </Nav>
-      : 
-      path === '/api/auth/user/' + userId ?
+      : path === '/api/auth/user/' + userId ?
       <Nav>
-        <Button variant='outline-info' onClick={() => openMainPage()}>Main page</Button>
+        <Button variant='outline-info' onClick={openMainPage}>Main page</Button>
       </Nav>
       : path === '/api/wishlist/' + userId ?
       <Nav>
-        <Button variant='outline-info' onClick={() => openMainPage()}>Main page</Button>
+        <Button variant='outline-info' onClick={openMainPage}>Main page</Button>
       </Nav>
-      : token ?
+      : token ? (
       <Nav className='w-100 justify-content-between'>
         <div>
           <Button 
             className='btn-nav-bar' 
             variant='outline-info' 
-            onClick={() => getProfile()}
+            onClick={getProfile}
           >Profile
           </Button>
           <Button 
             className='btn-nav-bar' 
             variant='outline-info' 
-            onClick={() => handleCreateRecipe()}
+            onClick={handleCreateRecipe}
           >Add recipe
           </Button>
           <NewRecipe show={recipeModal} close={closeModal}/>
           <Button 
             className='btn-nav-bar' 
             variant='outline-info' 
-            onClick={() => openWishList()}
+            onClick={openWishList}
           >Wishlist
           </Button>
         </div>
         <div>
-          <Button variant='outline-danger' onClick={() => logoutProfile()}>Logout</Button>
+          <Button variant='outline-danger' onClick={logoutProfile}>Logout</Button>
         </div>
       </Nav>
-      : null
+      ) : null
       }
     </Navbar>
   )

@@ -1,11 +1,13 @@
 import axios from "axios";
 
-const authhost = axios.create({
-  baseURL: 'http://localhost:5000/'
+import baseURL from '../config/url'
+
+const authHost = axios.create({
+  baseURL,
 })
 
 const host = axios.create({
-  baseURL: 'http://localhost:5000/'
+  baseURL,
 })
 
 const authInterceptor = (config: any) => {
@@ -13,9 +15,9 @@ const authInterceptor = (config: any) => {
   return config
 }
 
-authhost.interceptors.request.use(authInterceptor)
+authHost.interceptors.request.use(authInterceptor)
 
 export {
-  authhost,
+  authHost,
   host
 }

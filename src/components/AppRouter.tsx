@@ -16,7 +16,6 @@ const AppRouter: React.FC = () => {
       <Route path='/recipe/new' element={<RecipesList />} />
       <Route path='/recipe/user/:id' element={<RecipesList />} />
       <Route path='/api/wishlist/:id' element={<WishList />} />
-      <Route path='/recipe/by/' element={<RecipesList />} />
       <Route path="*" element={<Navigate replace to="/recipe" />} />
     </Routes>
   )

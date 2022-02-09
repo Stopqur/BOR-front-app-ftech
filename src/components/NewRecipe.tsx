@@ -2,22 +2,21 @@ import { Form, FormControl, Button, Modal } from "react-bootstrap"
 import React, { useState } from 'react'
 import { useDispatch } from "react-redux"
 
-import createRecipe from '../api/recipeApi'
+import { createRecipeWithoutImg, updateRecipeImg } from '../api/recipeApi'
 import { UseSelectorType } from '../hooks/hookUseSelector'
 import { getRecipes } from "../store/actions/recipe"
 
-interface INewRecipe {
+interface INewRecipeProps {
   show: boolean;
   close: any;
 }
 
-const NewRecipe = ({show, close}: INewRecipe) => {
+const NewRecipe = ({show, close}: INewRecipeProps) => {
   const dispatch = useDispatch()
   const [title, setTitle] = useState<string>('')
   const [description, setDescription] = useState<string>('')
   const [stepName, setStepName] = useState<string>('')
   const [cookingSteps, setCookingSteps] = useState<any[]>([])
-  const [quantitySteps, setQuantitySteps] = useState<number>(5)
   const [complexity, setComplexity] = useState<any>('')
   const [cookingTime, setCookingTime] = useState<string>('')
   const [img, setImg] = useState<any | null>(null)
@@ -26,33 +25,41 @@ const NewRecipe = ({show, close}: INewRecipe) => {
   const { userId } = UseSelectorType(store => store.authUserId)
 
   const createStep = () => {
-    if (quantitySteps > 0 && stepName !== '') {
+    if (cookingSteps.length <= 5 && stepName !== '') {
       const newStep = {
         name: stepName
       }
       setCookingSteps([...cookingSteps, newStep])
       setStepName('')
-      setQuantitySteps(quantitySteps - 1)
     }
   }
   const dataToRecipe = async() => {
     try {
       const formData = new FormData()
       formData.append('img', img) 
-      console.log(title, description, cookingSteps, userId, complexity, cookingTime, formData)
       if(title !== undefined 
-          && description !== undefined 
-          && cookingSteps !== undefined
-          && userId !== undefined
-          && complexity !== undefined
-          && cookingTime !== undefined
-          ) {
-            await createRecipe({title, description, cookingSteps, userId, complexity, cookingTime, formData})
-            dispatch(getRecipes())
-            close()
-          } else {
-            setError(true)
-          }
+        && description !== undefined 
+        && cookingSteps !== undefined
+        && userId !== undefined
+        && complexity !== undefined
+        && cookingTime !== undefined
+        && formData.get('img')
+        ) {
+        const recipe = await createRecipeWithoutImg({
+          title, 
+          description, 
+          cookingSteps, 
+          userId, 
+          complexity, 
+          cookingTime
+        })
+        const recipe_id: any = recipe.data.id
+        await updateRecipeImg({recipe_id, formData})
+        dispatch(getRecipes())
+        close()
+      } else {
+        setError(true)
+      }
     } catch(e) {
       console.log(e)
     }
@@ -71,7 +78,7 @@ const NewRecipe = ({show, close}: INewRecipe) => {
       </Modal.Header>
       <Modal.Body>
       {error ?
-      <div className='alert alert-danger'>Fill in all the fields!</div>
+        <div className='alert alert-danger'>Fill in all the fields!</div>
       : null
       }
         <Form>
@@ -96,11 +103,11 @@ const NewRecipe = ({show, close}: INewRecipe) => {
                 onChange={(e) => setStepName(e.target.value)}
               />
               <div className='cooking-step__action'>
-                <Button onClick={() => createStep()}>Add step</Button>
+                <Button onClick={createStep}>Add step</Button>
               </div>
 
             </div>
-            <p className='cooking-step__helping'>(no more than {quantitySteps})</p>
+            <p className='cooking-step__helping'>(no more than {5 - cookingSteps.length})</p>
             {cookingSteps.map((step, index) => {
               return <p key={index}>{index + 1}) {step.name}</p>
             })}
@@ -116,12 +123,9 @@ const NewRecipe = ({show, close}: INewRecipe) => {
           />
           <FormControl
             className='mb-3'
-            // type='time'
             value={cookingTime}
             onChange={e => setCookingTime(e.target.value)}
             placeholder='Cooking time of recipe (in minutes)'
-            min='0'
-            max='2:00:00'
           />
           <label className='mb-2' htmlFor="recipe-img">Add recipe image</label>
           <FormControl
@@ -132,10 +136,10 @@ const NewRecipe = ({show, close}: INewRecipe) => {
         </Form>
       </Modal.Body>
       <Modal.Footer>
-        <Button variant='outline-danger' onClick={() => close()}>Close</Button>
+        <Button variant='outline-danger' onClick={close}>Close</Button>
         <Button 
           variant='outline-success' 
-          onClick={() => dataToRecipe()}
+          onClick={dataToRecipe}
         >Add</Button>
       </Modal.Footer>
     </Modal>

@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Button, Card, Container, Form, FormControl } from 'react-bootstrap'
 
 import { UseSelectorType } from '../hooks/hookUseSelector'
-import { authhost } from '../api'
+import { authHost } from '../api'
 
 const Profile:React.FC = () => {
   const { userId } = UseSelectorType(store => store.authUserId)
@@ -17,7 +17,7 @@ const Profile:React.FC = () => {
 
   const saveEmail = async(email:string) => {
     try {
-      const user = await authhost.put('api/auth/user/' + userId, {email: email})
+      const user = await authHost.put('api/auth/user/' + userId, {email: email})
       setTypeField(false)
       return user
     } catch(e) {
@@ -37,31 +37,32 @@ const Profile:React.FC = () => {
           <Form>
             <div className='d-flex justify-content-between align-items-center border-top border-success pt-4'>
               <p className='profile__description'>Email: </p>
-              {typeField ?
-              <React.Fragment>
-                <div className='mw-75 ml-2'>
-                  <FormControl
-                    value={newEmail}
-                    onChange={e => setNewEmail(e.target.value)} 
-                  />
-                </div>
-                <Button 
-                  onClick={() => saveEmail(newEmail)} 
-                  type='button'
-                >Save
-                </Button>
-              </React.Fragment>
-              :
-              <React.Fragment>
-                <div className='mw-75 ml-2'>
-                  <p> {newEmail}</p>
-                </div>
-                <Button 
-                  onClick={() => updateEmail()} 
-                  type='button'
-                >Change
-                </Button>
-              </React.Fragment>
+              {typeField ? (
+                <React.Fragment>
+                  <div className='mw-75 ml-2'>
+                    <FormControl
+                      value={newEmail}
+                      onChange={e => setNewEmail(e.target.value)} 
+                    />
+                  </div>
+                  <Button 
+                    onClick={() => saveEmail(newEmail)} 
+                    type='button'
+                  >Save
+                  </Button>
+                </React.Fragment>       
+              ) : (
+                <React.Fragment>
+                  <div className='mw-75 ml-2'>
+                    <p> {newEmail}</p>
+                  </div>
+                  <Button 
+                    onClick={() => updateEmail()} 
+                    type='button'
+                  >Change
+                  </Button>
+                </React.Fragment>
+              )
               }
             </div>
           </Form>

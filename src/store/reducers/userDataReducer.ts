@@ -17,7 +17,6 @@ const initialValue: InitialState = {
   }
 }
 
-
 export const userDataReducer = (state = initialValue, action: DataUserAction): InitialState => {
   switch(action.type) {
     case 'USER_DATA':

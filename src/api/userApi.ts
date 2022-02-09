@@ -1,6 +1,6 @@
 import jwtDecode from 'jwt-decode'
 
-import { host, authhost } from './index'
+import { host, authHost } from './index'
 
 interface IRegistration {
   username: string;
@@ -15,7 +15,12 @@ interface ILogin {
 }
 
 export const registration = async ({username, email, password, dob}: IRegistration) => {
-  await host.post('api/auth/sign-up', { username, email, password, dob })
+  try {
+    const {data} = await host.post('api/auth/sign-up', { username, email, password, dob })
+    return data
+  } catch(e) {
+    console.log(e)
+  }
 }
 
 export const login = async ({email, password}: ILogin) => {
@@ -24,15 +29,14 @@ export const login = async ({email, password}: ILogin) => {
   return jwtDecode(data.accessToken)
 }
 
-export const check = async () => {
-  const { data } = await host.get('api/auth/user/')
+export const addToken = async (data: any) => {
   localStorage.setItem('token', data.accessToken)
   return jwtDecode(data.accessToken)
 }
 
-export const userProfile = async (id: string) => {
+export const userProfile = async (id: number | undefined) => {
   try {
-    const { data } = await authhost.get('api/auth/user/' + id)
+    const { data } = await authHost.get('api/auth/user/' + id)
     return data
   } catch (e) {
     console.log("error", e)

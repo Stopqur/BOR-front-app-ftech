@@ -19,9 +19,14 @@ const WishList:React.FC = () => {
   return (
     <div className='px-5 py-5'>
       <ListGroup>
-        {wishRecipes.map(item => {
-          return <RecipeItem key={item.id} item={item} flagIcon={true} token={token}/>
-        })}
+        {wishRecipes.length === 0 ? (
+          <h1 className='text-center'>Wish list is empty!</h1>
+        ) : (
+          wishRecipes.map(item => {
+            return <RecipeItem key={item.id} item={item} flagIcon={true} token={token}/>
+          })
+        )
+        }
       </ListGroup>
     </div>
   )

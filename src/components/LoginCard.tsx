@@ -9,7 +9,6 @@ import { login } from '../api/userApi'
 
 const LoginCard:React.FC = () => {
   const dispatch = useDispatch()
-  const [errorMessage, setErrorMessage] = useState<string>('')
   const [email, setEmail] = useState<string>('')
   const [password, setPassword] = useState<string>('')
   const [emailPlaceholder, setEmailPlaceHolder] = useState<string>('Email')
@@ -38,17 +37,13 @@ const LoginCard:React.FC = () => {
           dispatch(getUserIdAction(response.id))
           navigate('/recipe')   
       } catch(e:any) {
-          setErrorMessage(e.response.data.message)
+          console.log(e.response.data.message)
       }
     }
   }
   return (
     <Card style={{width: '500px'}} className='border-0'>
       <h2 className='mb-4' style={{color: 'green'}}>Authorization</h2>
-      {errorMessage !== ''
-      ? <div className='alert alert-danger'>{errorMessage}</div>
-      : console.log(errorMessage)
-      }
       <Form>
         {checkField === false && !email ?
           <Form.Control
@@ -83,7 +78,7 @@ const LoginCard:React.FC = () => {
       }
         <Row className='d-flex justify-content-between align-items-center pt-3'>
           <NavLink to='/api/auth/sign-up'>Sign up!</NavLink>
-          <Button className='mt-3' onClick={() => signIn()}>Login</Button>
+          <Button className='mt-3' onClick={signIn}>Login</Button>
         </Row>
       </Form>
     </Card>
