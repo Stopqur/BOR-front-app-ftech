@@ -1,5 +1,5 @@
 interface InitialState {
-  userData: any
+  userData: any;
 }
 
 interface DataUserAction {
@@ -13,15 +13,15 @@ const initialValue: InitialState = {
     userName: '',
     email: '',
     password: '',
-    dob: ''
-  }
-}
+    dob: '',
+  },
+};
 
 export const userDataReducer = (state = initialValue, action: DataUserAction): InitialState => {
-  switch(action.type) {
+  switch (action.type) {
     case 'USER_DATA':
-        return {...state, userData: action.payload}
+      return { ...state, userData: action.payload };
     default:
-      return state
+      return state;
   }
-}
+};

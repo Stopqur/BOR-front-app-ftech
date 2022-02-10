@@ -1,4 +1,4 @@
-import { FilterSortTypes } from '../actions/params'
+import { FilterSortTypes } from '../actions/params';
 
 interface FilterSortRecipesAction {
   type: FilterSortTypes.GET_FILTER_SORT_RECIPES;
@@ -6,18 +6,21 @@ interface FilterSortRecipesAction {
 }
 
 interface InitialState {
-  params: Object;
+  params: any;
 }
 
 const initialState: InitialState = {
-  params: {}
-}
+  params: {},
+};
 
-export const paramsReducer = (state = initialState, action: FilterSortRecipesAction): InitialState => {
-  switch(action.type) {
+export const paramsReducer = (
+  state = initialState,
+  action: FilterSortRecipesAction
+): InitialState => {
+  switch (action.type) {
     case FilterSortTypes.GET_FILTER_SORT_RECIPES:
-      return {...state, params: action.payload}
-    default: 
-      return state
+      return { ...state, params: action.payload };
+    default:
+      return state;
   }
-}
+};

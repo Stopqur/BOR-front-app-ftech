@@ -1,4 +1,4 @@
-import { authHost } from './index'
+import { authHost } from './index';
 
 interface IRecipeProps {
   FormData?: any;
@@ -12,48 +12,35 @@ interface IRecipeProps {
   formData?: any;
 }
 
-
-export const createRecipeWithoutImg = async({
-  title, 
-  description, 
+export const createRecipeWithoutImg = async ({
+  title,
+  description,
   cookingSteps,
-  userId, 
-  complexity, 
-  cookingTime, 
-  }: IRecipeProps) => {
-    try {
-      const newRecipe = await authHost.post('api/recipe/new', {
-        title, 
-        description, 
-        cookingSteps, 
-        user_id: userId, 
-        complexity, 
-        cookingTime, 
-      })
-      return newRecipe
-    } catch(e) {
-      console.log({e})
-    }
-}
-
-export const updateRecipeImg = async({recipe_id, formData}: any) => {
+  userId,
+  complexity,
+  cookingTime,
+}: IRecipeProps) => {
   try {
-    const newRecipeImg = await authHost.post('api/recipe/new', formData)
-    console.log('UPDATE', newRecipeImg)
-    const recipe = await authHost.put('api/recipe/new', {id: recipe_id, img: newRecipeImg.data})
-    return recipe
-  } catch(e) {
-    console.log({e})
+    const newRecipe = await authHost.post('api/recipe/new', {
+      title,
+      description,
+      cookingSteps,
+      user_id: userId,
+      complexity,
+      cookingTime,
+    });
+    return newRecipe;
+  } catch (e) {
+    console.log({ e });
   }
-}
+};
 
-// export const update
-
-// export const addWishRecipe = async(recipe_id: any, userId: any) => {
-//   try {
-//     const wishRecipe = await authHost.post('/api/recipe/', {recipe_id, user_id: userId})
-//     return wishRecipe
-//   } catch(e) {
-//     console.log(e)
-//   }
-// }
+export const updateRecipeImg = async ({ recipeId, formData }: any) => {
+  try {
+    const newRecipeImg = await authHost.post('api/recipe/new', formData);
+    const recipe = await authHost.put('api/recipe/new', { id: recipeId, img: newRecipeImg.data });
+    return recipe;
+  } catch (e) {
+    console.log({ e });
+  }
+};

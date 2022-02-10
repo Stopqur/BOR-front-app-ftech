@@ -1,18 +1,18 @@
-import { Dispatch } from 'redux'
+import { Dispatch } from 'redux';
 
 interface DataUserAction {
   type: string;
-  payload: {};
+  payload: any;
 }
 
-interface DataUser { 
+interface DataUser {
   username: string;
   email: string;
-  dob: string
+  dob: string;
 }
 
-export const userDataAction = (user:DataUser) => {
+export const userDataAction = (user: DataUser) => {
   return (dispatch: Dispatch<DataUserAction>) => {
-    dispatch({ type: 'USER_DATA', payload: user})
-  }
-}
+    dispatch({ type: 'USER_DATA', payload: user });
+  };
+};
